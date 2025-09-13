@@ -1,0 +1,1004 @@
+[
+  {
+    "ts": "2025-09-09T16:48:11Z",
+    "question": "show monthly budget spends , actual spends",
+    "sql": "SELECT\nTO_CHAR(DATE_TRUNC('month', \"month\")::date, 'YYYY-MM-DD') AS period,\nSUM(COALESCE(\"budget_spends\", 0)) AS total_budget_spends,\nSUM(COALESCE(\"actual_spends\", 0)) AS total_actual_spends\nFROM sample_data\nGROUP BY 1\nORDER BY 1 ASC"
+  },
+  {
+    "ts": "2025-09-09T16:41:37Z",
+    "question": "show monthly budget spends , actual spends",
+    "sql": "SELECT\nDATE_TRUNC('month', \"month\") AS period,\nSUM(COALESCE(\"budget_spends\", 0)) AS total_budget_spends,\nSUM(COALESCE(\"actual_spends\", 0)) AS total_actual_spends\nFROM\n\"sample_data\"\nGROUP BY\n1\nORDER BY\n1 ASC"
+  },
+  {
+    "ts": "2025-09-09T16:25:11Z",
+    "question": "Top-10 overspends by Brand-Month (absolute variance) , also unqiue legal entity name",
+    "sql": "SELECT\nDATE_TRUNC('month', \"month\") AS period,\nSUM(COALESCE(\"actual_spends\", 0) - COALESCE(\"budget_spends\", 0)) AS total_overspend,\nCOUNT(DISTINCT \"legal_entity_name\") AS unique_legal_entities\nFROM sample_data\nWHERE\n\"brand_name\" IS NOT NULL AND LENGTH(TRIM(\"brand_name\")) > 0 GROUP BY\n1\nORDER BY\ntotal_overspend DESC\nLIMIT 10"
+  },
+  {
+    "ts": "2025-09-09T16:24:53Z",
+    "question": "Top-10 overspends by Brand-Month (absolute variance) , unqiue legal entity name",
+    "sql": "SELECT\nDATE_TRUNC('month', \"month\") AS month,\nSUM(COALESCE(\"actual_spends\", 0) - COALESCE(\"budget_spends\", 0)) AS total_overspend\nFROM sample_data\nWHERE\n\"legal_entity_name\" IS NOT NULL AND LENGTH(TRIM(\"legal_entity_name\")) > 0 GROUP BY\n1\nORDER BY\ntotal_overspend DESC\nLIMIT 10"
+  },
+  {
+    "ts": "2025-09-09T16:23:37Z",
+    "question": "Top-10 overspends by Brand-Month (absolute variance) also show brand name, legal entity name",
+    "sql": "SELECT\nDATE_TRUNC('month', \"month\") AS period,\n\"brand_name\",\n\"legal_entity_name\",\nSUM(COALESCE(\"actual_spends\", 0) - COALESCE(\"budget_spends\", 0)) AS total_overspend\nFROM sample_data\nWHERE\n\"brand_name\" IS NOT NULL AND LENGTH(TRIM(\"brand_name\")) > 0 GROUP BY\n1,\n2,\n3\nORDER BY\ntotal_overspend DESC\nLIMIT 10"
+  },
+  {
+    "ts": "2025-09-09T16:21:05Z",
+    "question": "Top-10 overspends by Brand-Month (absolute variance)",
+    "sql": "SELECT\nDATE_TRUNC('month', \"month\") AS period,\nSUM(COALESCE(\"actual_spends\", 0) - COALESCE(\"budget_spends\", 0)) AS total_overspend\nFROM sample_data\nWHERE\n\"brand_name\" IS NOT NULL AND LENGTH(TRIM(\"brand_name\")) > 0 GROUP BY\n1\nORDER BY\ntotal_overspend DESC\nLIMIT 10"
+  },
+  {
+    "ts": "2025-09-06T10:05:02Z",
+    "question": "give accurate budget spends , actual spends in millions unique brand name",
+    "sql": "SELECT\nSUM(COALESCE(\"budget_spends\", 0)) AS total_budget_spends_in_millions,\nSUM(COALESCE(\"actual_spends\", 0)) AS total_actual_spends_in_millions\nFROM sample_data\nGROUP BY\n\"brand_name\"\nHAVING\nCOUNT(DISTINCT \"brand_name\") = 1"
+  },
+  {
+    "ts": "2025-09-06T10:00:13Z",
+    "question": "show monthly actual spends where channel vendor is facebook",
+    "sql": "SELECT\nDATE_TRUNC('month', \"month\") AS period,\nSUM(COALESCE(\"actual_spends\", 0)) AS total_actual_spends\nFROM sample_data\nWHERE\n\"channel_vendor\" ILIKE 'facebook'\nGROUP BY\n1\nORDER BY\n1 ASC"
+  },
+  {
+    "ts": "2025-09-06T09:57:58Z",
+    "question": "give department wise employee count and their annual salary",
+    "sql": "SELECT\n\"department\",\nCOUNT(*) AS employee_count,\nSUM(COALESCE(\"annual_salary\", 0)) AS total_annual_salary\nFROM \"employee_sample_data__data\"\nWHERE \"department\" IS NOT NULL AND LENGTH(TRIM(\"department\")) > 0 GROUP BY\n\"department\""
+  },
+  {
+    "ts": "2025-09-06T09:56:22Z",
+    "question": "give department wise employee count and their annual salary",
+    "sql": "SELECT\n\"department\",\nCOUNT(*) AS employee_count,\nSUM(COALESCE(\"annual_salary\", 0)) AS total_annual_salary\nFROM \"employee_sample_data__data\"\nWHERE \"department\" IS NOT NULL AND LENGTH(TRIM(\"department\")) > 0 GROUP BY\n\"department\""
+  },
+  {
+    "ts": "2025-09-06T09:55:10Z",
+    "question": "give department wise employee count and their annual salary",
+    "sql": "SELECT\n\"department\",\nCOUNT(*) AS employee_count,\nSUM(COALESCE(\"annual_salary\", 0)) AS total_annual_salary\nFROM \"employee_sample_data__data\"\nWHERE \"department\" IS NOT NULL AND LENGTH(TRIM(\"department\")) > 0 GROUP BY\n\"department\""
+  },
+  {
+    "ts": "2025-09-06T09:53:58Z",
+    "question": "for each department give average age , annual salary",
+    "sql": "SELECT\n\"department\",\nAVG(\"age\") AS avg_age,\nAVG(\"annual_salary\") AS avg_annual_salary\nFROM \"employee_sample_data__data\"\nWHERE \"department\" IS NOT NULL AND LENGTH(TRIM(\"department\")) > 0 GROUP BY\n\"department\"\nORDER BY\n\"department\""
+  },
+  {
+    "ts": "2025-09-06T09:52:12Z",
+    "question": "give department wise annual salary for male and female seprately",
+    "sql": "SELECT\n\"department\",\nSUM(COALESCE(CASE WHEN \"gender\" = 'Male' THEN \"annual_salary\" ELSE 0 END, 0)) AS \"male_salary\",\nSUM(COALESCE(CASE WHEN \"gender\" = 'Female' THEN \"annual_salary\" ELSE 0 END, 0)) AS \"female_salary\"\nFROM \"employee_sample_data__data\"\nWHERE \"department\" IS NOT NULL AND LENGTH(TRIM(\"department\")) > 0 GROUP BY\n\"department\"\nORDER BY\n\"department\""
+  },
+  {
+    "ts": "2025-09-06T09:49:57Z",
+    "question": "show monthly actual spends where channel vendor is facebook",
+    "sql": "SELECT\n(\nDATE_TRUNC('month', \"month\")\n)::DATE AS month,\nSUM(COALESCE(\"actual_spends\", 0)) AS total_actual_spends\nFROM \"sample_data\"\nWHERE\n\"channel_vendor\" ILIKE 'facebook'\nGROUP BY\n1\nORDER BY\n1"
+  },
+  {
+    "ts": "2025-09-06T09:48:00Z",
+    "question": "for each unique legal entity name show budget spends , actual spends",
+    "sql": "SELECT\n\"legal_entity_name\",\nSUM(COALESCE(\"budget_spends\", 0)) AS total_budget_spends,\nSUM(COALESCE(\"actual_spends\", 0)) AS total_actual_spends\nFROM \"sample_data\"\nWHERE \"legal_entity_name\" IS NOT NULL AND LENGTH(TRIM(\"legal_entity_name\")) > 0 GROUP BY\n\"legal_entity_name\""
+  },
+  {
+    "ts": "2025-09-06T09:47:23Z",
+    "question": "for each unique legal entity name show budget spends , actual spends",
+    "sql": "SELECT\n\"legal_entity_name\",\nSUM(COALESCE(\"budget_spends\", 0)) AS total_budget_spends,\nSUM(COALESCE(\"actual_spends\", 0)) AS total_actual_spends\nFROM \"sample_data\"\nWHERE \"legal_entity_name\" IS NOT NULL AND LENGTH(TRIM(\"legal_entity_name\")) > 0 GROUP BY\n\"legal_entity_name\""
+  },
+  {
+    "ts": "2025-09-06T09:27:11Z",
+    "question": "for each unique legal entity name show budget spends , actual spends",
+    "sql": "SELECT \"legal_entity_name\", SUM(COALESCE(\"budget_spends\", 0)) AS total_budget_spends, SUM(COALESCE(\"actual_spends\", 0)) AS total_actual_spends FROM sample_data WHERE \"legal_entity_name\" IS NOT NULL AND LENGTH(TRIM(\"legal_entity_name\")) > 0 GROUP BY \"legal_entity_name\""
+  },
+  {
+    "ts": "2025-09-05T13:19:05Z",
+    "question": "for each unique legal entity name show budget spends and actual spends",
+    "sql": "SELECT\n\"legal_entity_name\",\nSUM(COALESCE(\"budget_spends\", 0)) AS total_budget_spends,\nSUM(COALESCE(\"actual_spends\", 0)) AS total_actual_spends\nFROM sample_data\nWHERE \"legal_entity_name\" IS NOT NULL AND LENGTH(TRIM(\"legal_entity_name\")) > 0 GROUP BY\n\"legal_entity_name\""
+  },
+  {
+    "ts": "2025-09-05T13:16:56Z",
+    "question": "for each department give average age , annual salary",
+    "sql": "SELECT\n\"department\",\nAVG(\"age\") AS avg_age,\nAVG(\"annual_salary\") AS avg_annual_salary\nFROM \"employee_sample_data__data\"\nWHERE \"department\" IS NOT NULL AND LENGTH(TRIM(\"department\")) > 0 GROUP BY\n\"department\""
+  },
+  {
+    "ts": "2025-09-05T12:52:28Z",
+    "question": "for each department give average age , annual salary",
+    "sql": "SELECT\n\"department\",\nAVG(\"age\") AS avg_age,\nAVG(\"annual_salary\") AS avg_annual_salary\nFROM employee_sample_data__data\nWHERE \"department\" IS NOT NULL AND LENGTH(TRIM(\"department\")) > 0 GROUP BY\n\"department\""
+  },
+  {
+    "ts": "2025-09-05T12:37:28Z",
+    "question": "give department wise annual salary , employee count",
+    "sql": "SELECT \"department\", SUM(COALESCE(\"annual_salary\", 0)), COUNT(*) FROM employee_sample_data__data WHERE \"department\" IS NOT NULL AND LENGTH(TRIM(\"department\")) > 0 GROUP BY \"department\""
+  },
+  {
+    "ts": "2025-09-05T12:36:04Z",
+    "question": "for each department give average age , annual salary",
+    "sql": "SELECT \"department\", AVG(\"age\"), AVG(\"annual_salary\") FROM employee_sample_data__data WHERE \"department\" IS NOT NULL AND LENGTH(TRIM(\"department\")) > 0 GROUP BY \"department\""
+  },
+  {
+    "ts": "2025-09-05T12:35:11Z",
+    "question": "for each department give average age , annual salary round off result to nearest integer",
+    "sql": "SELECT \"department\", ROUND(AVG(\"age\")) AS average_age, ROUND(AVG(\"annual_salary\")) AS average_salary FROM employee_sample_data__data WHERE \"department\" IS NOT NULL AND LENGTH(TRIM(\"department\")) > 0 GROUP BY \"department\""
+  },
+  {
+    "ts": "2025-09-05T12:34:56Z",
+    "question": "for each department give average age , annual salary round off result to nearest integer",
+    "sql": "SELECT\n\"team\",\nAVG(\"actual_spends\")\nFROM sample_data\nWHERE \"team\" IS NOT NULL AND LENGTH(TRIM(\"team\")) > 0 GROUP BY\n\"team\"\nORDER BY\nAVG(\"actual_spends\") DESC"
+  },
+  {
+    "ts": "2025-09-05T12:33:26Z",
+    "question": "(raw SQL)",
+    "sql": "SELECT \"department\", SUM(COALESCE(\"annual_salary\", 0)), COUNT(*) FROM employee_sample_data__data WHERE \"department\" IS NOT NULL AND LENGTH(TRIM(\"department\")) > 0 GROUP BY \"department\""
+  },
+  {
+    "ts": "2025-09-05T12:32:44Z",
+    "question": "for each department give average age , annual salary",
+    "sql": "SELECT \"department\", AVG(\"age\"), AVG(\"annual_salary\") FROM employee_sample_data__data WHERE \"department\" IS NOT NULL AND LENGTH(TRIM(\"department\")) > 0 GROUP BY \"department\""
+  },
+  {
+    "ts": "2025-09-05T12:30:26Z",
+    "question": "give full name,employee age , annual salary for department = it",
+    "sql": "SELECT DATE_TRUNC('year', \"hire_date\") AS period, SUM(1) AS value FROM employee_sample_data__data WHERE \"department\" ILIKE 'it' GROUP BY 1 ORDER BY 1"
+  },
+  {
+    "ts": "2025-09-05T12:29:18Z",
+    "question": "give department wise annual salary for male and female seprately",
+    "sql": "SELECT \"department\", \"gender\", SUM(COALESCE(\"annual_salary\", 0)) AS \"total_salary\"\nFROM employee_sample_data__data\nWHERE \"department\" IS NOT NULL AND LENGTH(TRIM(\"department\")) > 0 AND \"gender\" IS NOT NULL AND LENGTH(TRIM(\"gender\")) > 0 AND \"department\" IS NOT NULL AND LENGTH(TRIM(\"department\")) > 0 AND \"gender\" IS NOT NULL AND LENGTH(TRIM(\"gender\")) > 0 GROUP BY \"department\", \"gender\"\nORDER BY \"department\", \"gender\""
+  },
+  {
+    "ts": "2025-09-05T12:28:18Z",
+    "question": "give department wise annual salary , employee count",
+    "sql": "SELECT \"department\", SUM(COALESCE(\"annual_salary\", 0)), COUNT(*) FROM employee_sample_data__data WHERE \"department\" IS NOT NULL AND LENGTH(TRIM(\"department\")) > 0 GROUP BY \"department\""
+  },
+  {
+    "ts": "2025-09-05T12:25:33Z",
+    "question": "give department wise annual salary",
+    "sql": "SELECT \"department\", SUM(COALESCE(\"annual_salary\", 0)) AS \"total_annual_salary\" FROM employee_sample_data__data WHERE \"department\" IS NOT NULL AND LENGTH(TRIM(\"department\")) > 0 GROUP BY \"department\""
+  },
+  {
+    "ts": "2025-09-05T12:25:15Z",
+    "question": "give department wise annual salary",
+    "sql": "SELECT DATE_TRUNC('year', \"month\"), SUM(COALESCE(\"actual_spends\", 0)) FROM sample_data GROUP BY 1 ORDER BY 1 ASC"
+  },
+  {
+    "ts": "2025-09-05T12:19:42Z",
+    "question": "(raw SQL)",
+    "sql": "SELECT \"department\", SUM(COALESCE(\"annual_salary\", 0)) AS \"total_annual_salary\"\nFROM \"employee_sample_data__data\"\nWHERE \"department\" IS NOT NULL AND LENGTH(TRIM(\"department\")) > 0 GROUP BY \"department\"\nORDER BY \"total_annual_salary\" DESC"
+  },
+  {
+    "ts": "2025-09-05T12:12:10Z",
+    "question": "give department wise annual salary",
+    "sql": "SELECT \"department\", SUM(COALESCE(\"annual_salary\", 0)) AS \"total_annual_salary\"\nFROM \"employee_sample_data__data\"\nWHERE \"department\" IS NOT NULL AND LENGTH(TRIM(\"department\")) > 0 GROUP BY \"department\"\nORDER BY \"total_annual_salary\" DESC"
+  },
+  {
+    "ts": "2025-09-05T11:44:24Z",
+    "question": "give department wise annual salary",
+    "sql": "SELECT \"department\", SUM(COALESCE(\"annual_salary\", 0)) AS \"total_annual_salary\"\nFROM \"employee_sample_data__data\"\nWHERE \"department\" IS NOT NULL AND LENGTH(TRIM(\"department\")) > 0 GROUP BY \"department\"\nORDER BY \"total_annual_salary\" DESC"
+  },
+  {
+    "ts": "2025-09-05T11:36:46Z",
+    "question": "give department wise annual salary\ngive department wise annual salary",
+    "sql": "SELECT \"department\", SUM(COALESCE(\"annual_salary\", 0)) AS \"total_annual_salary\" FROM employee_sample_data__data WHERE \"department\" IS NOT NULL AND LENGTH(TRIM(\"department\")) > 0 GROUP BY \"department\""
+  },
+  {
+    "ts": "2025-09-05T11:20:11Z",
+    "question": "Entities overspending budget by >20%",
+    "sql": "SELECT \"legal_entity_name\"\nFROM sample_data\nGROUP BY \"legal_entity_name\"\nHAVING SUM(COALESCE(\"actual_spends\", 0)) > 1.2 * SUM(COALESCE(\"budget_spends\", 0))"
+  },
+  {
+    "ts": "2025-09-05T11:17:41Z",
+    "question": "top 5 brands by average actual spends per estimate no",
+    "sql": "SELECT \"brand_name\", AVG(\"actual_spends\") AS avg_actual_spends\nFROM sample_data\nWHERE \"brand_name\" IS NOT NULL AND LENGTH(TRIM(\"brand_name\")) > 0 AND \"brand_name\" IS NOT NULL AND LENGTH(TRIM(\"brand_name\")) > 0 GROUP BY \"brand_name\"\nORDER BY avg_actual_spends DESC\nLIMIT 5"
+  },
+  {
+    "ts": "2025-09-05T11:15:08Z",
+    "question": "show actual spends ,budget spends for legal entity name",
+    "sql": "SELECT \"legal_entity_name\", SUM(COALESCE(\"actual_spends\", 0)), SUM(COALESCE(\"budget_spends\", 0)) FROM sample_data WHERE \"legal_entity_name\" IS NOT NULL AND LENGTH(TRIM(\"legal_entity_name\")) > 0 GROUP BY \"legal_entity_name\""
+  },
+  {
+    "ts": "2025-09-05T11:13:21Z",
+    "question": "show budget spends for each legal entity name",
+    "sql": "SELECT \"legal_entity_name\", \"budget_spends\" FROM samp__sheet1"
+  },
+  {
+    "ts": "2025-09-05T11:11:24Z",
+    "question": "show budget spends for each legal entity name",
+    "sql": "SELECT\n\"legal_entity_name\",\nSUM(COALESCE(\"budget_spends\", 0))\nFROM sample_data\nWHERE \"legal_entity_name\" IS NOT NULL AND LENGTH(TRIM(\"legal_entity_name\")) > 0 GROUP BY\n\"legal_entity_name\""
+  },
+  {
+    "ts": "2025-09-05T11:10:54Z",
+    "question": "(raw SQL)",
+    "sql": "SELECT \"legal_entity_name\", SUM(COALESCE(\"actual_spends\", 0)), SUM(COALESCE(\"budget_spends\", 0)) FROM sample_data WHERE \"legal_entity_name\" IS NOT NULL AND LENGTH(TRIM(\"legal_entity_name\")) > 0 GROUP BY \"legal_entity_name\""
+  },
+  {
+    "ts": "2025-09-05T11:04:18Z",
+    "question": "show actual spends ,budget spends for unique legal entity name",
+    "sql": "SELECT \"legal_entity_name\", SUM(COALESCE(\"actual_spends\", 0)), SUM(COALESCE(\"budget_spends\", 0)) FROM sample_data WHERE \"legal_entity_name\" IS NOT NULL AND LENGTH(TRIM(\"legal_entity_name\")) > 0 GROUP BY \"legal_entity_name\""
+  },
+  {
+    "ts": "2025-09-05T11:03:53Z",
+    "question": "show actual spends and budget spends for unique legal entity name",
+    "sql": "SELECT\nSUM(COALESCE(\"actual_spends\", 0)),\nSUM(COALESCE(\"budget_spends\", 0))\nFROM sample_data\nWHERE\n\"legal_entity_name\" IS NOT NULL AND LENGTH(TRIM(\"legal_entity_name\")) > 0"
+  },
+  {
+    "ts": "2025-09-04T16:47:39Z",
+    "question": "show budget spends , legal entity name which have channel vendor = facebook",
+    "sql": "SELECT \"budget_spends\", \"legal_entity_name\" FROM sample_data WHERE \"channel_vendor\" ILIKE 'facebook'"
+  },
+  {
+    "ts": "2025-09-04T16:45:50Z",
+    "question": "show actual spends , budget spends , legal entity name which have channel vendor = facebook",
+    "sql": "SELECT \"actual_spends\", \"budget_spends\", \"legal_entity_name\"\nFROM sample_data\nWHERE \"channel_vendor\" ILIKE 'facebook'"
+  },
+  {
+    "ts": "2025-09-04T16:43:11Z",
+    "question": "(raw SQL)",
+    "sql": "SELECT\n\"budget_spends\",\n\"actual_spends\"\nFROM samp__sheet1\nWHERE\n\"brand_name\" ILIKE 'landmark cars'"
+  },
+  {
+    "ts": "2025-09-04T16:42:31Z",
+    "question": "for each unique legal entity name show budget spends and actual spends",
+    "sql": "SELECT \"legal_entity_name\", SUM(COALESCE(\"budget_spends\", 0)), SUM(COALESCE(\"actual_spends\", 0)) FROM sample_data WHERE \"legal_entity_name\" IS NOT NULL AND LENGTH(TRIM(\"legal_entity_name\")) > 0 GROUP BY \"legal_entity_name\""
+  },
+  {
+    "ts": "2025-09-04T16:41:07Z",
+    "question": "give department wise annual salary for male and female seprately",
+    "sql": "SELECT \"department\", \"gender\", SUM(COALESCE(\"annual_salary\", 0)) AS \"total_salary\"\nFROM employee_sample_data__data\nWHERE \"department\" IS NOT NULL AND LENGTH(TRIM(\"department\")) > 0 AND \"gender\" IS NOT NULL AND LENGTH(TRIM(\"gender\")) > 0 AND \"department\" IS NOT NULL AND LENGTH(TRIM(\"department\")) > 0 AND \"gender\" IS NOT NULL AND LENGTH(TRIM(\"gender\")) > 0 GROUP BY \"department\", \"gender\"\nORDER BY \"department\", \"gender\""
+  },
+  {
+    "ts": "2025-09-04T11:48:22Z",
+    "question": "give department wise annual salary",
+    "sql": "SELECT \"department\", SUM(COALESCE(\"annual_salary\", 0)) AS \"total_annual_salary\" FROM employee_sample_data__data WHERE \"department\" IS NOT NULL AND LENGTH(TRIM(\"department\")) > 0 GROUP BY \"department\""
+  },
+  {
+    "ts": "2025-09-04T11:47:37Z",
+    "question": "give department wise annual salary for male and female seprately",
+    "sql": "SELECT \"department\", \"gender\", SUM(COALESCE(\"annual_salary\", 0)) AS \"total_salary\"\nFROM employee_sample_data__data\nWHERE \"department\" IS NOT NULL AND LENGTH(TRIM(\"department\")) > 0 AND \"gender\" IS NOT NULL AND LENGTH(TRIM(\"gender\")) > 0 AND \"department\" IS NOT NULL AND LENGTH(TRIM(\"department\")) > 0 AND \"gender\" IS NOT NULL AND LENGTH(TRIM(\"gender\")) > 0 GROUP BY \"department\", \"gender\"\nORDER BY \"department\", \"gender\""
+  },
+  {
+    "ts": "2025-09-04T11:46:55Z",
+    "question": "(raw SQL)",
+    "sql": "SELECT \"department\", \"gender\", SUM(COALESCE(\"annual_salary\", 0)) AS \"total_salary\"\nFROM employee_sample_data__data\nWHERE \"department\" IS NOT NULL AND LENGTH(TRIM(\"department\")) > 0 AND \"gender\" IS NOT NULL AND LENGTH(TRIM(\"gender\")) > 0 AND \"department\" IS NOT NULL AND LENGTH(TRIM(\"department\")) > 0 AND \"gender\" IS NOT NULL AND LENGTH(TRIM(\"gender\")) > 0 GROUP BY \"department\", \"gender\"\nORDER BY \"department\", \"gender\""
+  },
+  {
+    "ts": "2025-09-04T07:35:55Z",
+    "question": "give department wise annual salary for male and female seprately",
+    "sql": "SELECT \"department\", \"gender\", SUM(COALESCE(\"annual_salary\", 0)) AS \"total_salary\"\nFROM employee_sample_data__data\nWHERE \"department\" IS NOT NULL AND LENGTH(TRIM(\"department\")) > 0 AND \"gender\" IS NOT NULL AND LENGTH(TRIM(\"gender\")) > 0 AND \"department\" IS NOT NULL AND LENGTH(TRIM(\"department\")) > 0 AND \"gender\" IS NOT NULL AND LENGTH(TRIM(\"gender\")) > 0 GROUP BY \"department\", \"gender\"\nORDER BY \"department\", \"gender\""
+  },
+  {
+    "ts": "2025-09-04T07:23:09Z",
+    "question": "give department wise annual salary",
+    "sql": "SELECT \"department\", SUM(COALESCE(\"annual_salary\", 0)) AS \"total_salary\" FROM employee_sample_data__data WHERE \"department\" IS NOT NULL AND LENGTH(TRIM(\"department\")) > 0 GROUP BY \"department\""
+  },
+  {
+    "ts": "2025-09-04T07:15:57Z",
+    "question": "show full name where department is IT",
+    "sql": "SELECT \"full_name\" FROM employee_sample_data__data WHERE \"department\" ILIKE 'IT'"
+  },
+  {
+    "ts": "2025-09-04T07:15:44Z",
+    "question": "shpw full name where department is IT",
+    "sql": "SELECT \"legal_entity_name\" FROM sample_data WHERE \"team\" ILIKE 'IT' LIMIT 10"
+  },
+  {
+    "ts": "2025-09-04T07:14:50Z",
+    "question": "(raw SQL)",
+    "sql": "SELECT \"legal_entity_name\"\nFROM sample_data\n WHERE \"legal_entity_name\" IS NOT NULL AND LENGTH(TRIM(\"legal_entity_name\")) > 0 GROUP BY \"legal_entity_name\"\nORDER BY SUM(COALESCE(\"budget_spends\", 0)) DESC\nLIMIT 1"
+  },
+  {
+    "ts": "2025-09-04T07:14:35Z",
+    "question": "(raw SQL)",
+    "sql": "SELECT \"full_name\" FROM \"employee_sample_data__data\" WHERE LOWER(\"department\") = LOWER('IT')"
+  },
+  {
+    "ts": "2025-09-04T07:10:22Z",
+    "question": "for each unique legal entity name show actual spends",
+    "sql": "SELECT \"legal_entity_name\", SUM(COALESCE(\"actual_spends\", 0)) FROM sample_data WHERE \"legal_entity_name\" IS NOT NULL AND LENGTH(TRIM(\"legal_entity_name\")) > 0 GROUP BY \"legal_entity_name\""
+  },
+  {
+    "ts": "2025-09-04T07:10:01Z",
+    "question": "for each unique legal entity name show budget spends , actual spends",
+    "sql": "SELECT \"legal_entity_name\", SUM(COALESCE(\"budget_spends\", 0)), SUM(COALESCE(\"actual_spends\", 0)) FROM sample_data WHERE \"legal_entity_name\" IS NOT NULL AND LENGTH(TRIM(\"legal_entity_name\")) > 0 GROUP BY \"legal_entity_name\""
+  },
+  {
+    "ts": "2025-09-04T06:59:25Z",
+    "question": "(raw SQL)",
+    "sql": "SELECT\n\"budget_spends\",\n\"actual_spends\"\nFROM samp__sheet1\nWHERE\n\"brand_name\" ILIKE 'landmark cars'"
+  },
+  {
+    "ts": "2025-09-04T06:59:01Z",
+    "question": "for legal entity name show budget spends , actual spends",
+    "sql": "SELECT \"legal_entity_name\", SUM(COALESCE(\"budget_spends\", 0)), SUM(COALESCE(\"actual_spends\", 0)) FROM sample_data WHERE \"legal_entity_name\" IS NOT NULL AND LENGTH(TRIM(\"legal_entity_name\")) > 0 GROUP BY \"legal_entity_name\""
+  },
+  {
+    "ts": "2025-09-04T06:57:51Z",
+    "question": "for unique legal entity name show budget spends , actual spends",
+    "sql": "SELECT \"legal_entity_name\", SUM(COALESCE(\"budget_spends\", 0)), SUM(COALESCE(\"actual_spends\", 0)) FROM sample_data WHERE \"legal_entity_name\" IS NOT NULL AND LENGTH(TRIM(\"legal_entity_name\")) > 0 GROUP BY \"legal_entity_name\""
+  },
+  {
+    "ts": "2025-09-04T06:57:06Z",
+    "question": "for landmark cars show budget spends , actual spends",
+    "sql": "SELECT\n\"budget_spends\",\n\"actual_spends\"\nFROM samp__sheet1\nWHERE\n\"brand_name\" ILIKE 'landmark cars'"
+  },
+  {
+    "ts": "2025-09-04T06:56:20Z",
+    "question": "for landmark cars show budget spends",
+    "sql": "SELECT\n\"budget_spends\"\nFROM samp__sheet1\nWHERE\n\"brand_name\" ILIKE 'landmark cars'"
+  },
+  {
+    "ts": "2025-09-04T06:55:29Z",
+    "question": "for landmark cars show actual spends and budget spends",
+    "sql": "SELECT\n\"actual_spends\",\n\"budget_spends\"\nFROM sample_data\nWHERE\n\"brand_name\" ILIKE 'landmark cars'"
+  },
+  {
+    "ts": "2025-09-04T06:52:12Z",
+    "question": "for unique brand name show actual spends and budget spends",
+    "sql": "SELECT \"brand_name\", SUM(COALESCE(\"actual_spends\", 0)), SUM(COALESCE(\"budget_spends\", 0)) FROM sample_data WHERE \"brand_name\" IS NOT NULL AND LENGTH(TRIM(\"brand_name\")) > 0 GROUP BY \"brand_name\""
+  },
+  {
+    "ts": "2025-09-04T06:43:41Z",
+    "question": "list for each unique legal entity name  actual and budget spends",
+    "sql": "SELECT \"legal_entity_name\", SUM(COALESCE(\"actual_spends\", 0)), SUM(COALESCE(\"budget_spends\", 0)) FROM sample_data WHERE \"legal_entity_name\" IS NOT NULL AND LENGTH(TRIM(\"legal_entity_name\")) > 0 GROUP BY \"legal_entity_name\""
+  },
+  {
+    "ts": "2025-09-04T06:32:26Z",
+    "question": "show monthly actual and budget spends for unique legal entity name",
+    "sql": "SELECT\nDATE_TRUNC('month', \"month\") AS period,\nSUM(COALESCE(\"actual_spends\", 0)) AS actual_spends,\nSUM(COALESCE(\"budget_spends\", 0)) AS budget_spends\nFROM sample_data\nWHERE\n\"legal_entity_name\" IS NOT NULL AND LENGTH(TRIM(\"legal_entity_name\")) > 0 GROUP BY\n1\nORDER BY\n1 ASC"
+  },
+  {
+    "ts": "2025-09-04T06:31:01Z",
+    "question": "show monthly spends for unique legal entity name",
+    "sql": "SELECT DATE_TRUNC('month', \"month\") AS period, SUM(COALESCE(\"actual_spends\", 0)) AS value FROM sample_data WHERE \"legal_entity_name\" IS NOT NULL AND LENGTH(TRIM(\"legal_entity_name\")) > 0 GROUP BY 1 ORDER BY 1 ASC"
+  },
+  {
+    "ts": "2025-09-04T05:13:04Z",
+    "question": "for unique legal entity name show budget spends",
+    "sql": "SELECT \"legal_entity_name\", SUM(COALESCE(\"budget_spends\", 0)) FROM sample_data WHERE \"legal_entity_name\" IS NOT NULL AND LENGTH(TRIM(\"legal_entity_name\")) > 0 GROUP BY \"legal_entity_name\""
+  },
+  {
+    "ts": "2025-09-04T05:12:29Z",
+    "question": "for unique legal entity name show actual spends",
+    "sql": "SELECT \"legal_entity_name\", SUM(COALESCE(\"actual_spends\", 0)) FROM sample_data WHERE \"legal_entity_name\" IS NOT NULL AND LENGTH(TRIM(\"legal_entity_name\")) > 0 GROUP BY \"legal_entity_name\""
+  },
+  {
+    "ts": "2025-09-04T05:11:33Z",
+    "question": "for unique legal entity name show actual spends and budget spends",
+    "sql": "SELECT \"legal_entity_name\", SUM(COALESCE(\"actual_spends\", 0)), SUM(COALESCE(\"budget_spends\", 0)) FROM sample_data WHERE \"legal_entity_name\" IS NOT NULL AND LENGTH(TRIM(\"legal_entity_name\")) > 0 GROUP BY \"legal_entity_name\""
+  },
+  {
+    "ts": "2025-09-04T05:10:19Z",
+    "question": "for unique legal entity name show actual spends and budget spends",
+    "sql": "SELECT\n\"legal_entity_name\",\nSUM(COALESCE(\"actual_spends\", 0)),\nSUM(COALESCE(\"budget_spends\", 0))\nFROM sample_data\nWHERE \"legal_entity_name\" IS NOT NULL AND LENGTH(TRIM(\"legal_entity_name\")) > 0 GROUP BY\n\"legal_entity_name\""
+  },
+  {
+    "ts": "2025-09-04T05:09:38Z",
+    "question": "(raw SQL)",
+    "sql": "SELECT \"legal_entity_name\", SUM(COALESCE(\"actual_spends\", 0)), SUM(COALESCE(\"budget_spends\", 0)), COUNT(DISTINCT \"estimate_no\")\nFROM sample_data\nWHERE \"legal_entity_name\" IS NOT NULL AND LENGTH(TRIM(\"legal_entity_name\")) > 0\nGROUP BY \"legal_entity_name\""
+  },
+  {
+    "ts": "2025-09-04T05:08:44Z",
+    "question": "(raw SQL)",
+    "sql": "SELECT TO_CHAR(DATE_TRUNC('month', \"month\"), 'YYYY-MM') AS month, SUM(COALESCE(actual_spends, 0)) AS total_actual_spends FROM sample_data WHERE \"legal_entity_name\" IS NOT NULL AND LENGTH(TRIM(\"legal_entity_name\")) > 0 GROUP BY month"
+  },
+  {
+    "ts": "2025-09-04T04:44:52Z",
+    "question": "show monthly actual_spends for unique legal_entity_names",
+    "sql": "SELECT TO_CHAR(DATE_TRUNC('month', \"month\"), 'YYYY-MM') AS month, SUM(COALESCE(actual_spends, 0)) AS total_actual_spends FROM sample_data WHERE \"legal_entity_name\" IS NOT NULL AND LENGTH(TRIM(\"legal_entity_name\")) > 0 GROUP BY month"
+  },
+  {
+    "ts": "2025-09-03T04:27:55Z",
+    "question": "RAW_SQL: SELECT \"legal_entity_name\", \"actual_spends\", \"exchange_rate\"\nFROM sample_data\nWHERE \"channel_vendor\" ILIKE 'facebook'",
+    "sql": "SELECT \"legal_entity_name\", SUM(COALESCE(\"actual_spends\", 0)), AVG(COALESCE(\"exchange_rate\", 0)) FROM sample_data WHERE \"channel_vendor\" ILIKE 'facebook' GROUP BY \"legal_entity_name\""
+  },
+  {
+    "ts": "2025-09-03T04:23:57Z",
+    "question": "for unique legal entity name list actual spends , budget spends and estimate no.",
+    "sql": "SELECT \"legal_entity_name\", SUM(COALESCE(\"actual_spends\", 0)), SUM(COALESCE(\"budget_spends\", 0)), COUNT(DISTINCT \"estimate_no\")\nFROM sample_data\nWHERE \"legal_entity_name\" IS NOT NULL AND LENGTH(TRIM(\"legal_entity_name\")) > 0\nGROUP BY \"legal_entity_name\""
+  },
+  {
+    "ts": "2025-09-03T04:22:30Z",
+    "question": "show actual_spends , budget_spends for unique legal entity name",
+    "sql": "SELECT \"legal_entity_name\", SUM(COALESCE(\"actual_spends\", 0)), SUM(COALESCE(\"budget_spends\", 0)) FROM sample_data GROUP BY \"legal_entity_name\""
+  },
+  {
+    "ts": "2025-09-03T04:18:23Z",
+    "question": "show actual_spends , budget spends for unique legal entity name",
+    "sql": "SELECT \"legal_entity_name\", SUM(COALESCE(\"actual_spends\", 0)), SUM(COALESCE(\"budget_spends\", 0)) FROM sample_data WHERE \"legal_entity_name\" IS NOT NULL AND LENGTH(TRIM(\"legal_entity_name\")) > 0 GROUP BY \"legal_entity_name\""
+  },
+  {
+    "ts": "2025-09-02T05:06:27Z",
+    "question": "(raw SQL)",
+    "sql": "SELECT \"legal_entity_name\", \"actual_spends\", \"exchange_rate\"\nFROM sample_data\nWHERE \"channel_vendor\" ILIKE 'facebook'"
+  },
+  {
+    "ts": "2025-09-02T05:06:15Z",
+    "question": "(raw SQL)",
+    "sql": "SELECT \"legal_entity_name\", SUM(COALESCE(\"actual_spends\", 0)) AS \"total_actual_spends\"\nFROM sample_data\nWHERE \"legal_entity_name\" IS NOT NULL AND LENGTH(TRIM(\"legal_entity_name\")) > 0 AND \"channel_vendor\" ILIKE 'facebook'\nGROUP BY \"legal_entity_name\"\nORDER BY \"total_actual_spends\" DESC"
+  },
+  {
+    "ts": "2025-09-02T05:06:06Z",
+    "question": "(raw SQL)",
+    "sql": "SELECT \"legal_entity_name\", SUM(COALESCE(\"actual_spends\", 0)) AS \"total_actual_spends\"\nFROM sample_data\nWHERE \"legal_entity_name\" IS NOT NULL AND LENGTH(TRIM(\"legal_entity_name\")) > 0 AND \"channel_vendor\" ILIKE 'facebook'\nGROUP BY \"legal_entity_name\"\nORDER BY \"total_actual_spends\" DESC"
+  },
+  {
+    "ts": "2025-09-02T05:00:24Z",
+    "question": "show legal entity name where channel vendor is facebook along with their actual spend",
+    "sql": "SELECT \"legal_entity_name\", SUM(COALESCE(\"actual_spends\", 0)) AS \"total_actual_spends\"\nFROM sample_data\nWHERE \"legal_entity_name\" IS NOT NULL AND LENGTH(TRIM(\"legal_entity_name\")) > 0 AND \"channel_vendor\" ILIKE 'facebook'\nGROUP BY \"legal_entity_name\"\nORDER BY \"total_actual_spends\" DESC"
+  },
+  {
+    "ts": "2025-09-02T05:00:23Z",
+    "question": "show legal entity name where channel vendor is facebook along with their actual spend",
+    "sql": "SELECT \"legal_entity_name\", SUM(COALESCE(\"actual_spends\", 0)) AS \"total_actual_spends\"\nFROM sample_data\nWHERE \"legal_entity_name\" IS NOT NULL AND LENGTH(TRIM(\"legal_entity_name\")) > 0 AND \"channel_vendor\" ILIKE 'facebook'\nGROUP BY \"legal_entity_name\"\nORDER BY \"total_actual_spends\" DESC"
+  },
+  {
+    "ts": "2025-09-02T05:00:04Z",
+    "question": "show legal entity name where channel vendor is facebook along with their actual spends and exchange rate",
+    "sql": "SELECT \"legal_entity_name\", \"actual_spends\", \"exchange_rate\"\nFROM sample_data\nWHERE \"channel_vendor\" ILIKE 'facebook'"
+  },
+  {
+    "ts": "2025-09-02T04:58:03Z",
+    "question": "show me unqiue legal entity name having actual spends greater than budget spends with all three column listed",
+    "sql": "SELECT DISTINCT \"legal_entity_name\"\nFROM sample_data\nWHERE \"actual_spends\" > \"budget_spends\""
+  },
+  {
+    "ts": "2025-09-02T04:58:02Z",
+    "question": "show me unqiue legal entity name having actual spends greater than budget spends with all three column listed",
+    "sql": "SELECT DISTINCT \"legal_entity_name\"\nFROM sample_data\nWHERE \"actual_spends\" > \"budget_spends\""
+  },
+  {
+    "ts": "2025-08-27T06:54:14Z",
+    "question": "show actual spends for all channel vendor",
+    "sql": "SELECT \"channel_vendor\", SUM(COALESCE(\"actual_spends\", 0)) FROM sample_data WHERE \"channel_vendor\" IS NOT NULL AND LENGTH(TRIM(\"channel_vendor\")) > 0 GROUP BY \"channel_vendor\""
+  },
+  {
+    "ts": "2025-08-27T06:36:46Z",
+    "question": "show monthly actual spends for channel vendor Facebook",
+    "sql": "SELECT DATE_TRUNC('month', \"month\"), SUM(COALESCE(\"actual_spends\", 0)) FROM sample_data WHERE \"channel_vendor\" ILIKE 'Facebook' GROUP BY 1 ORDER BY 1 ASC"
+  },
+  {
+    "ts": "2025-08-27T06:05:55Z",
+    "question": "show weekly actual spends by channel vendor google",
+    "sql": "SELECT DATE_TRUNC('week', \"month\"), SUM(COALESCE(\"actual_spends\", 0)) FROM sample_data WHERE \"channel_vendor\" ILIKE 'google' GROUP BY 1 ORDER BY 1 ASC"
+  },
+  {
+    "ts": "2025-08-27T05:53:11Z",
+    "question": "show channel_vendor wise actual spends",
+    "sql": "SELECT \"channel_vendor\", SUM(COALESCE(\"actual_spends\", 0)) AS total_actual_spends\nFROM sample_data\nWHERE \"channel_vendor\" IS NOT NULL AND LENGTH(TRIM(\"channel_vendor\")) > 0 AND \"channel_vendor\" IS NOT NULL AND LENGTH(TRIM(\"channel_vendor\")) > 0 GROUP BY \"channel_vendor\"\nORDER BY total_actual_spends DESC"
+  },
+  {
+    "ts": "2025-08-27T05:52:42Z",
+    "question": "(raw SQL)",
+    "sql": "SELECT \"department\", COUNT(*) FROM \"employee_sample_data__data\" WHERE \"department\" IS NOT NULL AND LENGTH(TRIM(\"department\")) > 0 GROUP BY \"department\""
+  },
+  {
+    "ts": "2025-08-26T04:05:13Z",
+    "question": "(raw SQL)",
+    "sql": "SELECT \"department\", COUNT(*) FROM \"employee_sample_data__data\" WHERE \"department\" IS NOT NULL AND LENGTH(TRIM(\"department\")) > 0 GROUP BY \"department\""
+  },
+  {
+    "ts": "2025-08-26T04:04:12Z",
+    "question": "show monthly actual vs budget spends for year 2024",
+    "sql": "SELECT\nDATE_TRUNC('month', \"month\") AS period,\nSUM(COALESCE(\"actual_spends\", 0)) AS actual_spends,\nSUM(COALESCE(\"budget_spends\", 0)) AS budget_spends\nFROM sample_data\nWHERE\n\"month\" >= '2024-01-01' AND \"month\" < '2025-01-01'\nGROUP BY\n1\nORDER BY\n1 ASC"
+  },
+  {
+    "ts": "2025-08-26T03:53:39Z",
+    "question": "(raw SQL)",
+    "sql": "SELECT \"department\", COUNT(*) FROM \"employee_sample_data__data\" WHERE \"department\" IS NOT NULL AND LENGTH(TRIM(\"department\")) > 0 GROUP BY \"department\""
+  },
+  {
+    "ts": "2025-08-26T03:53:18Z",
+    "question": "show legal entity name that has highest actual spends group by channel_vendor",
+    "sql": "SELECT \"legal_entity_name\" FROM sample_data WHERE \"legal_entity_name\" IS NOT NULL AND LENGTH(TRIM(\"legal_entity_name\")) > 0 GROUP BY \"legal_entity_name\" ORDER BY SUM(COALESCE(\"actual_spends\", 0)) DESC LIMIT 1"
+  },
+  {
+    "ts": "2025-08-25T14:06:37Z",
+    "question": "show count group by unique department wise",
+    "sql": "SELECT \"department\", COUNT(*) FROM \"employee_sample_data__data\" WHERE \"department\" IS NOT NULL AND LENGTH(TRIM(\"department\")) > 0 GROUP BY \"department\""
+  },
+  {
+    "ts": "2025-08-25T14:01:12Z",
+    "question": "(raw SQL)",
+    "sql": "SELECT DATE_TRUNC('month', \"month\") AS period, SUM(COALESCE(\"actual_spends\", 0)) / 1000000 AS value FROM sample_data WHERE \"month\" >= '2024-01-01' AND \"month\" < '2025-01-01' GROUP BY 1 ORDER BY 1 ASC"
+  },
+  {
+    "ts": "2025-08-25T03:35:27Z",
+    "question": "(raw SQL)",
+    "sql": "SELECT DATE_TRUNC('month', \"month\") AS period, SUM(COALESCE(\"actual_spends\", 0)) / 1000000 AS value FROM sample_data WHERE \"month\" >= '2024-01-01' AND \"month\" < '2025-01-01' GROUP BY 1 ORDER BY 1 ASC"
+  },
+  {
+    "ts": "2025-08-25T03:06:31Z",
+    "question": "give monthly actual spends for year 2024 and display in millions scales units",
+    "sql": "SELECT DATE_TRUNC('month', \"month\") AS period, SUM(COALESCE(\"actual_spends\", 0)) / 1000000 AS value FROM sample_data WHERE \"month\" >= '2024-01-01' AND \"month\" < '2025-01-01' GROUP BY 1 ORDER BY 1 ASC",
+    "tables": [
+      "sample_data"
+    ],
+    "preview": {
+      "columns": [
+        "period",
+        "value"
+      ],
+      "rows": [
+        [
+          "2024-01-01 00:00:00+05:30",
+          "1033.8951744000000000"
+        ],
+        [
+          "2024-02-01 00:00:00+05:30",
+          "1021.8943534800000000"
+        ],
+        [
+          "2024-03-01 00:00:00+05:30",
+          "1112.9926332000000000"
+        ],
+        [
+          "2024-04-01 00:00:00+05:30",
+          "974.6405686200000000"
+        ],
+        [
+          "2024-05-01 00:00:00+05:30",
+          "1054.2479884700000000"
+        ],
+        [
+          "2024-06-01 00:00:00+05:30",
+          "1010.7955315600000000"
+        ],
+        [
+          "2024-07-01 00:00:00+05:30",
+          "1103.5307015200000000"
+        ],
+        [
+          "2024-08-01 00:00:00+05:30",
+          "1030.2085432600000000"
+        ],
+        [
+          "2024-09-01 00:00:00+05:30",
+          "1075.7706561200000000"
+        ],
+        [
+          "2024-10-01 00:00:00+05:30",
+          "1152.4349443900000000"
+        ]
+      ]
+    }
+  },
+  {
+    "ts": "2025-08-25T03:05:56Z",
+    "question": "give monthly actual spends for year 2024 in compressed format value",
+    "sql": "SELECT DATE_TRUNC('month', \"month\") AS period, SUM(COALESCE(\"actual_spends\", 0)) AS value FROM sample_data WHERE \"month\" >= '2024-01-01' AND \"month\" < '2025-01-01' GROUP BY 1 ORDER BY 1 ASC",
+    "tables": [
+      "sample_data"
+    ],
+    "preview": {
+      "columns": [
+        "period",
+        "value"
+      ],
+      "rows": [
+        [
+          "2024-01-01 00:00:00+05:30",
+          "1033895174.40"
+        ],
+        [
+          "2024-02-01 00:00:00+05:30",
+          "1021894353.48"
+        ],
+        [
+          "2024-03-01 00:00:00+05:30",
+          "1112992633.20"
+        ],
+        [
+          "2024-04-01 00:00:00+05:30",
+          "974640568.62"
+        ],
+        [
+          "2024-05-01 00:00:00+05:30",
+          "1054247988.47"
+        ],
+        [
+          "2024-06-01 00:00:00+05:30",
+          "1010795531.56"
+        ],
+        [
+          "2024-07-01 00:00:00+05:30",
+          "1103530701.52"
+        ],
+        [
+          "2024-08-01 00:00:00+05:30",
+          "1030208543.26"
+        ],
+        [
+          "2024-09-01 00:00:00+05:30",
+          "1075770656.12"
+        ],
+        [
+          "2024-10-01 00:00:00+05:30",
+          "1152434944.39"
+        ]
+      ]
+    }
+  },
+  {
+    "ts": "2025-08-25T03:04:47Z",
+    "question": "give monthly actual spends for year 2024",
+    "sql": "SELECT DATE_TRUNC('month', \"month\") AS period, SUM(COALESCE(\"actual_spends\", 0)) AS value FROM sample_data WHERE \"month\" >= '2024-01-01' AND \"month\" <= '2024-12-31' GROUP BY 1 ORDER BY 1 ASC",
+    "tables": [
+      "sample_data"
+    ],
+    "preview": {
+      "columns": [
+        "period",
+        "value"
+      ],
+      "rows": [
+        [
+          "2024-01-01 00:00:00+05:30",
+          "1033895174.40"
+        ],
+        [
+          "2024-02-01 00:00:00+05:30",
+          "1021894353.48"
+        ],
+        [
+          "2024-03-01 00:00:00+05:30",
+          "1112992633.20"
+        ],
+        [
+          "2024-04-01 00:00:00+05:30",
+          "974640568.62"
+        ],
+        [
+          "2024-05-01 00:00:00+05:30",
+          "1054247988.47"
+        ],
+        [
+          "2024-06-01 00:00:00+05:30",
+          "1010795531.56"
+        ],
+        [
+          "2024-07-01 00:00:00+05:30",
+          "1103530701.52"
+        ],
+        [
+          "2024-08-01 00:00:00+05:30",
+          "1030208543.26"
+        ],
+        [
+          "2024-09-01 00:00:00+05:30",
+          "1075770656.12"
+        ],
+        [
+          "2024-10-01 00:00:00+05:30",
+          "1152434944.39"
+        ]
+      ]
+    }
+  },
+  {
+    "ts": "2025-08-25T02:48:43Z",
+    "question": "monthly spends for year 2024",
+    "sql": "SELECT\n  SUM(COALESCE(\"actual_spends\", 0))\nFROM \"sample_data\"\nWHERE\n  EXTRACT(\n    YEAR\n    FROM \"month\"\n  ) = 2024 AND \"legal_entity_name\" IS NOT NULL AND LENGTH(TRIM(\"legal_entity_name\")) > 0",
+    "tables": [
+      "sample_data"
+    ],
+    "preview": {
+      "columns": [
+        "sum"
+      ],
+      "rows": [
+        [
+          "12960768376.70"
+        ]
+      ]
+    }
+  },
+  {
+    "ts": "2025-08-24T17:53:59Z",
+    "question": "give percentage distribution of each department",
+    "sql": "SELECT\n  \"department\",\n  (\n    COUNT(*) * 100.0 / (\n      SELECT\n        COUNT(*)\n      FROM \"employee_sample_data__data\"\n    )\n  ) AS \"percentage\"\nFROM \"employee_sample_data__data\"\n WHERE \"full_name\" IS NOT NULL AND LENGTH(TRIM(\"full_name\")) > 0 GROUP BY\n  \"department\"",
+    "tables": [
+      "employee_sample_data__data"
+    ],
+    "preview": {
+      "columns": [
+        "department",
+        "percentage"
+      ],
+      "rows": [
+        [
+          "Finance",
+          "12.0000000000000000"
+        ],
+        [
+          "Sales",
+          "14.0000000000000000"
+        ],
+        [
+          "Accounting",
+          "9.6000000000000000"
+        ],
+        [
+          "Human Resources",
+          "12.5000000000000000"
+        ],
+        [
+          "Engineering",
+          "15.8000000000000000"
+        ],
+        [
+          "IT",
+          "24.1000000000000000"
+        ],
+        [
+          "Marketing",
+          "12.0000000000000000"
+        ]
+      ]
+    }
+  },
+  {
+    "ts": "2025-08-24T17:53:20Z",
+    "question": "show legal entity name which has highest budget spends",
+    "sql": "SELECT \"legal_entity_name\"\nFROM sample_data\n WHERE \"legal_entity_name\" IS NOT NULL AND LENGTH(TRIM(\"legal_entity_name\")) > 0 GROUP BY \"legal_entity_name\"\nORDER BY SUM(COALESCE(\"budget_spends\", 0)) DESC\nLIMIT 1",
+    "tables": [
+      "sample_data"
+    ],
+    "preview": {
+      "columns": [
+        "legal_entity_name"
+      ],
+      "rows": [
+        [
+          "USV PRIVATE LIMITED"
+        ]
+      ]
+    }
+  },
+  {
+    "ts": "2025-08-24T17:53:09Z",
+    "question": "show legal entity name which has highest actual spends",
+    "sql": "SELECT \"legal_entity_name\"\nFROM sample_data\n WHERE \"legal_entity_name\" IS NOT NULL AND LENGTH(TRIM(\"legal_entity_name\")) > 0 GROUP BY \"legal_entity_name\"\nORDER BY SUM(COALESCE(\"actual_spends\", 0)) DESC\nLIMIT 1",
+    "tables": [
+      "sample_data"
+    ],
+    "preview": {
+      "columns": [
+        "legal_entity_name"
+      ],
+      "rows": [
+        [
+          "Myntra Designs Pvt. Ltd."
+        ]
+      ]
+    }
+  },
+  {
+    "ts": "2025-08-24T17:52:42Z",
+    "question": "show legal entity name which has highest actual spends and budget spends",
+    "sql": "SELECT \"legal_entity_name\"\nFROM sample_data\n WHERE \"legal_entity_name\" IS NOT NULL AND LENGTH(TRIM(\"legal_entity_name\")) > 0 GROUP BY \"legal_entity_name\"\nORDER BY SUM(COALESCE(\"actual_spends\", 0)) + SUM(COALESCE(\"budget_spends\", 0)) DESC\nLIMIT 1",
+    "tables": [
+      "sample_data"
+    ],
+    "preview": {
+      "columns": [
+        "legal_entity_name"
+      ],
+      "rows": [
+        [
+          "Myntra Designs Pvt. Ltd."
+        ]
+      ]
+    }
+  },
+  {
+    "ts": "2025-08-24T17:50:53Z",
+    "question": "show all employee where departent is IT",
+    "sql": "SELECT * FROM \"employee_sample_data__data\" WHERE LOWER(\"department\") = LOWER('IT')",
+    "tables": [
+      "employee_sample_data__data"
+    ],
+    "preview": {
+      "columns": [
+        "eeid",
+        "full_name",
+        "job_title",
+        "department",
+        "business_unit",
+        "gender",
+        "ethnicity",
+        "age",
+        "hire_date",
+        "annual_salary",
+        "bonus",
+        "country",
+        "city",
+        "exit_date"
+      ],
+      "rows": [
+        [
+          "E02387",
+          "Emily Davis",
+          "Sr. Manger",
+          "IT",
+          "Research & Development",
+          "Female",
+          "Black",
+          55,
+          "2016-04-08",
+          141604,
+          0.15,
+          "United States",
+          "Seattle",
+          "2021-10-16 00:00:00"
+        ],
+        [
+          "E04105",
+          "Theodore Dinh",
+          "Technical Architect",
+          "IT",
+          "Manufacturing",
+          "Male",
+          "Asian",
+          59,
+          "1997-11-29",
+          99975,
+          0.0,
+          "China",
+          "Chongqing",
+          null
+        ],
+        [
+          "E02832",
+          "Penelope Jordan",
+          "Computer Systems Manager",
+          "IT",
+          "Manufacturing",
+          "Female",
+          "Caucasian",
+          26,
+          "2019-09-27",
+          84913,
+          0.07,
+          "United States",
+          "Chicago",
+          null
+        ],
+        [
+          "E01550",
+          "Ruby Barnes",
+          "Manager",
+          "IT",
+          "Corporate",
+          "Female",
+          "Caucasian",
+          27,
+          "2020-07-01",
+          119746,
+          0.1,
+          "United States",
+          "Phoenix",
+          null
+        ],
+        [
+          "E04116",
+          "David Barnes",
+          "Director",
+          "IT",
+          "Corporate",
+          "Male",
+          "Caucasian",
+          64,
+          "2013-11-03",
+          186503,
+          0.24,
+          "United States",
+          "Columbus",
+          null
+        ],
+        [
+          "E03680",
+          "Elias Alvarado",
+          "Sr. Manger",
+          "IT",
+          "Manufacturing",
+          "Male",
+          "Latino",
+          56,
+          "2012-01-09",
+          146140,
+          0.1,
+          "Brazil",
+          "Manaus",
+          null
+        ],
+        [
+          "E03484",
+          "Logan Rivera",
+          "Director",
+          "IT",
+          "Research & Development",
+          "Male",
+          "Latino",
+          59,
+          "2002-05-24",
+          172787,
+          0.28,
+          "Brazil",
+          "Rio de Janerio",
+          null
+        ],
+        [
+          "E00304",
+          "Dylan Choi",
+          "Vice President",
+          "IT",
+          "Corporate",
+          "Male",
+          "Asian",
+          63,
+          "2012-05-11",
+          231141,
+          0.34,
+          "China",
+          "Beijing",
+          null
+        ],
+        [
+          "E02594",
+          "Ezekiel Kumar",
+          "IT Coordinator",
+          "IT",
+          "Research & Development",
+          "Male",
+          "Asian",
+          28,
+          "2017-06-25",
+          54775,
+          0.0,
+          "United States",
+          "Columbus",
+          null
+        ],
+        [
+          "E02074",
+          "Nora Brown",
+          "Enterprise Architect",
+          "IT",
+          "Manufacturing",
+          "Female",
+          "Caucasian",
+          32,
+          "2014-02-11",
+          99575,
+          0.0,
+          "United States",
+          "Austin",
+          null
+        ]
+      ]
+    }
+  },
+  {
+    "id": "e0be1466-ce82-455c-b071-ed263f7fb82c",
+    "timestamp": "2025-08-22 18:20:00",
+    "question": "show me legal entity name having highest actual spends",
+    "tables": [
+      "sample_data"
+    ],
+    "sql": "SELECT \"legal_entity_name\" FROM sample_data  WHERE \"legal_entity_name\" IS NOT NULL AND LENGTH(TRIM(\"legal_entity_name\")) > 0 GROUP BY \"legal_entity_name\" ORDER BY SUM(COALESCE(\"actual_spends\", 0)) DESC LIMIT 1",
+    "row_count": 1
+  },
+  {
+    "id": "ecb20778-a48b-4cdc-9e27-847e968f9591",
+    "timestamp": "2025-08-24 19:33:59",
+    "question": "show full name where department is IT",
+    "tables": [
+      "employee_sample_data__data"
+    ],
+    "sql": "SELECT \"full_name\" FROM \"employee_sample_data__data\" WHERE LOWER(\"department\") = LOWER('IT')",
+    "row_count": 241
+  },
+  {
+    "id": "92bb0b5c-d0c0-414e-b460-eef90e7cafc0",
+    "timestamp": "2025-08-24 19:52:58",
+    "question": "give percentage distribution of each department",
+    "tables": [
+      "employee_sample_data__data"
+    ],
+    "sql": "SELECT\n  \"department\",\n  COUNT(*) * 100.0 / (\n    SELECT\n      COUNT(*)\n    FROM \"employee_sample_data__data\"\n  ) AS \"percentage\"\nFROM \"employee_sample_data__data\"\n WHERE \"full_name\" IS NOT NULL AND LENGTH(TRIM(\"full_name\")) > 0 GROUP BY\n  \"department\"",
+    "row_count": 7
+  }
+]

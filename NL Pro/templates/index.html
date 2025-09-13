@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Natural Language to SQL Query Converter</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v={{ asset_version }}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
+</head>
+<body>
+  <header class="hero">
+    <div class="container">
+      <h1>Natural Language to SQL Query Converter</h1>
+      <p>Convert your natural language questions into SQL queries and see the results instantly.</p>
+    </div>
+  </header>
+
+  <main class="container layout">
+    <section class="left">
+      <div class="card">
+        <h3>Database Schema</h3>
+        <label class="label">Limit to tables (optional):</label>
+        <select id="table-select" multiple size="6"></select>
+        <div id="schema-tree" class="schema-tree"></div>
+      </div>
+
+      <div class="card">
+        <div class="row-between">
+          <h3>Query History</h3>
+          <div>
+            <button id="hist-refresh" class="btn btn-secondary">Refresh</button>
+            <button id="hist-clear" class="btn btn-danger">Clear</button>
+          </div>
+        </div>
+        <div id="history-list" class="history-list">No history yet.</div>
+      </div>
+    </section>
+
+    <section class="right">
+      <div class="card">
+        <h3>Ask a Question</h3>
+        <textarea id="question" rows="4" placeholder="e.g., Show monthly spends for 2024 by brand"></textarea>
+        <div class="row">
+          <button id="run-btn" class="btn btn-primary">Run Query</button>
+          <button id="export-csv" class="btn" disabled>Export CSV</button>
+          <button id="export-xlsx" class="btn" disabled>Export Excel</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Generated SQL</h3>
+        <pre id="sql-box" class="pre"></pre>
+      </div>
+
+      <div class="card">
+        <h3>Query Results</h3>
+
+        <div id="chart-controls" class="controls hidden">
+          <div class="row">
+            <label for="x-col">X</label>
+            <select id="x-col"></select>
+
+            <label for="y-col">Y (multi)</label>
+            <select id="y-col" multiple></select>
+
+            <label for="chart-type">Chart</label>
+            <select id="chart-type">
+              <option value="auto">Auto</option>
+              <option value="line">Line</option>
+              <option value="bar">Bar</option>
+              <option value="scatter">Scatter</option>
+              <option value="hist">Histogram</option>
+              <option value="pie">Pie</option>
+            </select>
+
+            <button id="plot-btn" class="btn">Plot</button>
+          </div>
+        </div>
+
+        <div class="chart-wrap">
+          <canvas id="resultChart" height="240"></canvas>
+        </div>
+
+        <div id="table-wrap" class="table-wrap"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">© NL → SQL Demo</div>
+  </footer>
+
+  <script>
+    window.APP_SCHEMA = {{ schema_json|tojson }};
+    window.ASSET_VERSION = "{{ asset_version }}";
+  </script>
+  <script defer src="{{ url_for('static', filename='app.js') }}?v={{ asset_version }}"></script>
+</body>
+</html>
